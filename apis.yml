@@ -1,0 +1,29 @@
+aid: sahifa
+name: Sahifa
+description: 'Sahifa is a company surfaced via the API Evangelist harvest backlog (source: new-submission)
+  and added to the network as a stub for full-pipeline profiling.'
+url: https://raw.githubusercontent.com/api-evangelist/sahifa/refs/heads/main/apis.yml
+x-type: company
+x-source: harvest:new-submission
+x-tier: stub
+x-tier-reason: harvest
+specificationVersion: '0.20'
+created: '2026-09-28'
+modified: '2026-09-28'
+tags:
+- Company
+apis: []
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
+- FN: APIs.json
+  email: info@apis.io
+common:
+- type: Website
+  url: https://sahifa.dev/en/
+- type: Documentation
+  url: https://sahifa.dev/en/docs
+x-submission-notes: HTML-to-PDF and screenshot API with Arabic/RTL support, hosted in Saudi Arabia; OpenAPI
+  at /docs/openapi.json; free tier 100 renders/month.
+x-submission-probe: '2026-09-28: root 200, invented 404, openapi 200, docs 200'
+x-submitted-by: support@sahifa.dev (apis.io/add, 2026-09-27)
