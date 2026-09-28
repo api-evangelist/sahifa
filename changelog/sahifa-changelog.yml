@@ -1,0 +1,21 @@
+generated: '2026-09-28'
+method: searched
+generator: extract-docs-artifacts.py (local)
+source: https://sahifa.dev/en/docs/changelog
+sources:
+- https://sahifa.dev/en/docs/changelog
+entries:
+- breaking: true
+  highlights:
+  - 'Self-service accounts: sign in with your email at /en/account and get a Sandbox key at once.'
+  - 'Sandbox: 100 renders a month, up to 10 a day ( X-Quota-Daily-* headers).'
+  - 'Screenshots: block_banners_by_heuristics is now refused with 400 instead of being ignored.'
+  date: '2026-09-24'
+- breaking: false
+  highlights:
+  - The API runs in production in Jeddah at https://api.sahifa.dev .
+  - POST /v3/convert/pdf , compatible with PDFShift v3.
+  - GET and POST /take , compatible with ScreenshotOne.
+  date: '2026-09-23'
+note: The page does not specify a versioning scheme or a current version identifier.
+docs: https://sahifa.dev/en/docs/changelog

@@ -1,0 +1,40 @@
+generated: '2026-09-28'
+method: searched
+generator: extract-docs-artifacts.py (local)
+source: https://sahifa.dev/en/docs/authentication
+sources:
+- https://sahifa.dev/en/docs/authentication
+- https://sahifa.dev/en/docs/quickstart
+description: Authentication methods for Sahifa API
+schemes:
+- type: apiKey
+  name: X-API-Key
+  evidence: 'X-API-Key header X-API-Key: sk_live_... Any client'
+  location: header
+  header: X-API-Key
+  how_to_obtain: From the Sahifa dashboard; the key is provided after signing up.
+- type: apiKey
+  name: X-Access-Key
+  evidence: 'X-Access-Key header X-Access-Key: sk_live_... Any client'
+  location: header
+  header: X-Access-Key
+  how_to_obtain: From the Sahifa dashboard; the key is provided after signing up.
+- type: apiKey
+  name: access_key
+  evidence: access_key query parameter /take?access_key=sk_live_...&url=... ScreenshotOne clients
+  location: query
+  how_to_obtain: From the Sahifa dashboard; the key is provided after signing up.
+- type: http-bearer
+  name: Bearer token
+  evidence: 'Bearer token Authorization: Bearer sk_live_... Any client'
+  location: header
+  header: Authorization
+  how_to_obtain: From the Sahifa dashboard; the key is provided after signing up.
+- type: http-basic
+  name: Basic authentication
+  evidence: Basic authentication user api , password = your key PDFShift clients
+  location: header
+  header: Authorization
+  how_to_obtain: Use username "api" and the API key as the password; the key is provided after signing up.
+note: No OAuth2 flows are documented for Sahifa.
+docs: https://sahifa.dev/en/docs/authentication

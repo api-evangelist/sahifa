@@ -1,0 +1,53 @@
+openapi: 3.2.0
+info:
+  title: Sahifa Health API
+  version: '2026-09-24'
+  contact:
+    email: support@sahifa.dev
+    url: https://sahifa.dev/docs
+  description: 'Operations tagged Health across 2 of this provider''s published API definitions: sahifa.json, sahifa-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.sahifa.dev
+  description: Jeddah (me-jeddah-1)
+security:
+- basicAuth: []
+- apiKeyHeader: []
+- accessKey: []
+tags:
+- name: Health
+paths:
+  /health:
+    get:
+      operationId: health
+      summary: Service status
+      security: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+      tags:
+      - Health
+    servers:
+    - url: https://api.sahifa.dev
+      description: Jeddah (me-jeddah-1)
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: User 'api', password = your API key (PDFShift style).
+    apiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    accessKey:
+      type: apiKey
+      in: query
+      name: access_key
+      description: ScreenshotOne style.
+x-refined-from:
+- sahifa.json
+- sahifa-openapi.json

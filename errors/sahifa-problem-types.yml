@@ -1,0 +1,76 @@
+generated: '2026-09-28'
+method: derived
+generator: derive-problem-types.py
+source:
+- openapi/sahifa-openapi.json
+format: custom
+envelope:
+  media_type: application/json
+  schema: Error
+coverage:
+  operations: 4
+  statuses_declared: 9
+problems:
+- status: 400
+  title: Bad Request
+  description: Invalid request
+  operations: 3
+  media_types:
+  - application/json
+  schema: Error
+- status: 401
+  title: Unauthorized
+  description: Missing or invalid API key
+  operations: 3
+  media_types:
+  - application/json
+  schema: Error
+- status: 402
+  title: Payment Required
+  description: Monthly render allowance used up
+  operations: 3
+  media_types:
+  - application/json
+  schema: Error
+- status: 404
+  title: Not Found
+  description: Selector not found
+  operations: 2
+  media_types:
+  - application/json
+  schema: Error
+- status: 408
+  title: Request Timeout
+  description: Rendering timed out
+  operations: 3
+  media_types:
+  - application/json
+  schema: Error
+- status: 413
+  title: Content Too Large
+  description: Request body over 10 MB
+  operations: 3
+  media_types:
+  - application/json
+  schema: Error
+- status: 429
+  title: Too Many Requests
+  description: Render queue full; retry
+  operations: 3
+  media_types:
+  - application/json
+  schema: Error
+- status: 500
+  title: Internal Server Error
+  description: Rendering error
+  operations: 3
+  media_types:
+  - application/json
+  schema: Error
+- status: 503
+  title: Service Unavailable
+  description: Temporarily unavailable; retry
+  operations: 3
+  media_types:
+  - application/json
+  schema: Error

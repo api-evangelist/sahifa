@@ -1,0 +1,41 @@
+{
+  "provider": "sahifa",
+  "sources": [
+    "_original/sahifa.json",
+    "sahifa-openapi.json"
+  ],
+  "outputs": [
+    "sahifa-convert-api-openapi.yml",
+    "sahifa-health-api-openapi.yml",
+    "sahifa-take-api-openapi.yml"
+  ],
+  "archived": [
+    "archived openapi/sahifa-openapi.json"
+  ],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "sahifa.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "sahifa.json: tagged paths POST /v3/convert/pdf -> Convert",
+    "sahifa.json: tagged paths GET /take -> Take",
+    "sahifa.json: tagged paths POST /take -> Take",
+    "sahifa.json: tagged paths GET /health -> Health",
+    "sahifa.json: declared missing tag: Convert",
+    "sahifa.json: declared missing tag: Health",
+    "sahifa.json: declared missing tag: Take",
+    "sahifa-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "sahifa-openapi.json: tagged paths POST /v3/convert/pdf -> Convert",
+    "sahifa-openapi.json: tagged paths GET /take -> Take",
+    "sahifa-openapi.json: tagged paths POST /take -> Take",
+    "sahifa-openapi.json: tagged paths GET /health -> Health",
+    "sahifa-openapi.json: declared missing tag: Convert",
+    "sahifa-openapi.json: declared missing tag: Health",
+    "sahifa-openapi.json: declared missing tag: Take",
+    "tag 'Convert' spans 2 source specs (sahifa.json, sahifa-openapi.json): per-path servers applied",
+    "tag 'Health' spans 2 source specs (sahifa.json, sahifa-openapi.json): per-path servers applied",
+    "tag 'Take' spans 2 source specs (sahifa.json, sahifa-openapi.json): per-path servers applied",
+    "apis.yml register: written (+3 apis, 3 total)"
+  ],
+  "skipped": []
+}

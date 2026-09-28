@@ -1,0 +1,33 @@
+generated: '2026-09-28'
+method: derived
+generator: derive-mcp-candidate.py
+source:
+- openapi/sahifa-openapi.json
+status: candidate
+deployment:
+  mode: none
+  auth: unknown
+  verified: probed
+note: No MCP server was found. The pre-flight posted tools/list to /mcp on api.sahifa.dev, sahifa.dev; verdict hold-unverified. Candidate tools
+  below are derived from the 4 operation(s) in the provider's own OpenAPI (4 listed); they describe what a server WOULD expose, not one that exists.
+tools:
+- name: convert_pdf
+  operationId: convertPdf
+  method: POST
+  path: /v3/convert/pdf
+  description: Convert HTML or a URL to PDF (PDFShift v3 compatible)
+- name: take_screenshot
+  operationId: takeScreenshot
+  method: GET
+  path: /take
+  description: Screenshot of a URL or HTML (ScreenshotOne compatible)
+- name: take_screenshot_post
+  operationId: takeScreenshotPost
+  method: POST
+  path: /take
+  description: Screenshot with a JSON body
+- name: health
+  operationId: health
+  method: GET
+  path: /health
+  description: Service status

@@ -1,0 +1,268 @@
+openapi: 3.2.0
+info:
+  title: Sahifa Convert API
+  version: '2026-09-24'
+  contact:
+    email: support@sahifa.dev
+    url: https://sahifa.dev/docs
+  description: 'Operations tagged Convert across 2 of this provider''s published API definitions: sahifa.json, sahifa-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.sahifa.dev
+  description: Jeddah (me-jeddah-1)
+security:
+- basicAuth: []
+- apiKeyHeader: []
+- accessKey: []
+tags:
+- name: Convert
+paths:
+  /v3/convert/pdf:
+    post:
+      operationId: convertPdf
+      summary: Convert HTML or a URL to PDF (PDFShift v3 compatible)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - source
+              properties:
+                source:
+                  type: string
+                  description: http(s) URL or HTML document.
+                format:
+                  type: string
+                  default: A4
+                  description: A0-A6, Letter, Legal, Tabloid, Ledger, or {width}x{height} such as 210mmx297mm.
+                landscape:
+                  type: boolean
+                  default: false
+                margin:
+                  oneOf:
+                  - type: string
+                  - type: object
+                    properties:
+                      top:
+                        type: string
+                      right:
+                        type: string
+                      bottom:
+                        type: string
+                      left:
+                        type: string
+                header:
+                  type: object
+                  required:
+                  - source
+                  properties:
+                    source:
+                      type: string
+                      description: HTML; variables {{page}}, {{total}}, {{date}}, {{title}}, {{url}}.
+                    height:
+                      type: string
+                      description: Accepted; the space comes from margin.
+                footer:
+                  type: object
+                  required:
+                  - source
+                  properties:
+                    source:
+                      type: string
+                      description: HTML; variables {{page}}, {{total}}, {{date}}, {{title}}, {{url}}.
+                    height:
+                      type: string
+                      description: Accepted; the space comes from margin.
+                pages:
+                  type: string
+                  examples:
+                  - 1,3-5
+                zoom:
+                  type: number
+                  minimum: 0.1
+                  maximum: 2
+                use_print:
+                  type: boolean
+                  default: false
+                disable_backgrounds:
+                  type: boolean
+                  default: false
+                disable_javascript:
+                  type: boolean
+                  default: false
+                delay:
+                  type: integer
+                  minimum: 0
+                  maximum: 10000
+                  description: Milliseconds.
+                wait_for:
+                  type: string
+                  description: Name of a global function that returns truthy when the page is ready.
+                timeout:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                  description: Seconds; capped at 30.
+                raise_for_status:
+                  type: boolean
+                  default: false
+                css:
+                  type: string
+                javascript:
+                  type: string
+                auth:
+                  type: object
+                  required:
+                  - username
+                  - password
+                  properties:
+                    username:
+                      type: string
+                    password:
+                      type: string
+                http_headers:
+                  type: object
+                  additionalProperties:
+                    type: string
+                cookies:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - name
+                    - value
+                    properties:
+                      name:
+                        type: string
+                      value:
+                        type: string
+                      domain:
+                        type: string
+                      path:
+                        type: string
+                      secure:
+                        type: boolean
+                      http_only:
+                        type: boolean
+                encode:
+                  type: boolean
+                  default: false
+                  description: Return JSON with base64 data.
+                sandbox:
+                  type: boolean
+                  description: Accepted and ignored.
+      responses:
+        '200':
+          description: The PDF, or JSON when encode is true
+          headers:
+            X-Response-Duration:
+              schema:
+                type: integer
+              description: Render time in milliseconds
+            X-Quota-Limit:
+              schema:
+                type: integer
+              description: Monthly render allowance of the key
+            X-Quota-Remaining:
+              schema:
+                type: integer
+              description: Renders left this month before this request
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: string
+                    contentEncoding: base64
+                  filesize:
+                    type: integer
+                  duration:
+                    type: integer
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Missing or invalid API key
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Monthly render allowance used up
+        '408':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Rendering timed out
+        '413':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Request body over 10 MB
+        '429':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Render queue full; retry
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Rendering error
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Temporarily unavailable; retry
+      tags:
+      - Convert
+    servers:
+    - url: https://api.sahifa.dev
+      description: Jeddah (me-jeddah-1)
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          const: false
+        error:
+          type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: User 'api', password = your API key (PDFShift style).
+    apiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    accessKey:
+      type: apiKey
+      in: query
+      name: access_key
+      description: ScreenshotOne style.
+x-refined-from:
+- sahifa.json
+- sahifa-openapi.json

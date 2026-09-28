@@ -1,29 +1,124 @@
 aid: sahifa
+
 name: Sahifa
-description: 'Sahifa is a company surfaced via the API Evangelist harvest backlog (source: new-submission)
-  and added to the network as a stub for full-pipeline profiling.'
+
+description: Sahifa provides a PDF and screenshot API hosted in Saudi Arabia, converting HTML to PDF and web pages to images. It runs on Oracle
+  Cloud in Jeddah, ensuring data never leaves the Kingdom. The service offers a free sandbox tier and paid plans for businesses needing secure,
+  localized document rendering.
+
 url: https://raw.githubusercontent.com/api-evangelist/sahifa/refs/heads/main/apis.yml
+
 x-type: company
+
 x-source: harvest:new-submission
-x-tier: stub
-x-tier-reason: harvest
+
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-09-28 (modular-v1; was harvest)
+
 specificationVersion: '0.20'
+
 created: '2026-09-28'
+
 modified: '2026-09-28'
+
 tags:
 - Company
-apis: []
+- PDF
+- Screenshot
+- API
+- SaudiArabia
+- Cloud
+
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+
 common:
+- type: AgenticAccess
+  url: agentic-access/sahifa-agentic-access.yml
+- type: Spectral
+  url: rules/sahifa-rules.yml
+- type: JSONLD
+  url: json-ld/sahifa-context.jsonld
+- type: Vocabulary
+  url: vocabulary/sahifa-vocabulary.yml
+- type: DataModel
+  url: data-model/sahifa-data-model.yml
+- type: ChangeLog
+  url: changelog/sahifa-changelog.yml
+- type: Authentication
+  url: authentication/sahifa-authentication.yml
+- type: ErrorCatalog
+  url: errors/sahifa-problem-types.yml
+- type: Conformance
+  url: conformance/sahifa-conformance.yml
+- type: Hosts
+  url: hosts/sahifa-hosts.yml
+- type: SDKs
+  url: packages/sahifa-packages.yml
+- type: Packages
+  url: packages/sahifa-packages.yml
+- type: TermsOfService
+  url: https://sahifa.dev/en/terms
+- type: PrivacyPolicy
+  url: https://sahifa.dev/en/privacy
+- type: ChangeLog
+  url: https://sahifa.dev/en/docs/changelog
+- type: DomainSecurity
+  url: security/sahifa-domain-security.yml
 - type: Website
   url: https://sahifa.dev/en/
 - type: Documentation
   url: https://sahifa.dev/en/docs
-x-submission-notes: HTML-to-PDF and screenshot API with Arabic/RTL support, hosted in Saudi Arabia; OpenAPI
-  at /docs/openapi.json; free tier 100 renders/month.
+- type: APIReference
+  url: https://sahifa.dev/en/docs/openapi
+- type: GettingStarted
+  url: https://sahifa.dev/en/docs/quickstart
+- type: Support
+  url: https://sahifa.dev/en/contact
+
+apis:
+- aid: sahifa:sahifa-convert-api
+  name: Sahifa Convert API
+  description: The Convert API from Sahifa — 1 operation(s) for convert.
+  humanURL: https://sahifa.dev/en/docs
+  baseURL: https://api.sahifa.dev
+  tags:
+  - Convert
+  properties:
+  - type: OpenAPI
+    url: openapi/sahifa-convert-api-openapi.yml
+- aid: sahifa:sahifa-health-api
+  name: Sahifa Health API
+  description: The Health API from Sahifa — 1 operation(s) for health.
+  humanURL: https://sahifa.dev/en/docs
+  baseURL: https://api.sahifa.dev
+  tags:
+  - Health
+  properties:
+  - type: OpenAPI
+    url: openapi/sahifa-health-api-openapi.yml
+- aid: sahifa:sahifa-take-api
+  name: Sahifa Take API
+  description: The Take API from Sahifa — 1 operation(s) for take.
+  humanURL: https://sahifa.dev/en/docs
+  baseURL: https://api.sahifa.dev
+  tags:
+  - Take
+  properties:
+  - type: OpenAPI
+    url: openapi/sahifa-take-api-openapi.yml
+x-submission-notes: HTML-to-PDF and screenshot API with Arabic/RTL support, hosted in Saudi Arabia; OpenAPI at /docs/openapi.json; free tier 100
+  renders/month.
+
 x-submission-probe: '2026-09-28: root 200, invented 404, openapi 200, docs 200'
+
 x-submitted-by: support@sahifa.dev (apis.io/add, 2026-09-27)
+x-enrichment:
+  date: '2026-09-28'
+  status: enriched
+  artifacts_added: 17
+  pass: modular-v1
+  engine: identity=local,contract=local,surfaces=local,docs=local,regulatory=local
