@@ -2,10 +2,10 @@ openapi: 3.2.0
 info:
   title: Sahifa Convert API
   version: '2026-09-24'
+  description: 'HTML to PDF and screenshot API hosted in Jeddah, Saudi Arabia. Compatible with PDFShift v3 and ScreenshotOne. Documentation: https://sahifa.dev/docs'
   contact:
     email: support@sahifa.dev
     url: https://sahifa.dev/docs
-  description: 'Operations tagged Convert across 2 of this provider''s published API definitions: sahifa.json, sahifa-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.sahifa.dev
   description: Jeddah (me-jeddah-1)
@@ -236,9 +236,6 @@ paths:
           description: Temporarily unavailable; retry
       tags:
       - Convert
-    servers:
-    - url: https://api.sahifa.dev
-      description: Jeddah (me-jeddah-1)
 components:
   schemas:
     Error:
@@ -263,6 +260,3 @@ components:
       in: query
       name: access_key
       description: ScreenshotOne style.
-x-refined-from:
-- sahifa.json
-- sahifa-openapi.json

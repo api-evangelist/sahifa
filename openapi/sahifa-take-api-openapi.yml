@@ -2,10 +2,10 @@ openapi: 3.2.0
 info:
   title: Sahifa Take API
   version: '2026-09-24'
+  description: 'HTML to PDF and screenshot API hosted in Jeddah, Saudi Arabia. Compatible with PDFShift v3 and ScreenshotOne. Documentation: https://sahifa.dev/docs'
   contact:
     email: support@sahifa.dev
     url: https://sahifa.dev/docs
-  description: 'Operations tagged Take across 2 of this provider''s published API definitions: sahifa.json, sahifa-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.sahifa.dev
   description: Jeddah (me-jeddah-1)
@@ -539,10 +539,16 @@ paths:
           description: Temporarily unavailable; retry
       tags:
       - Take
-    servers:
-    - url: https://api.sahifa.dev
-      description: Jeddah (me-jeddah-1)
 components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          const: false
+        error:
+          type: string
   responses:
     Screenshot:
       description: The image or PDF, or JSON when response_type=json
@@ -589,15 +595,6 @@ components:
                 contentEncoding: base64
               size:
                 type: integer
-  schemas:
-    Error:
-      type: object
-      properties:
-        success:
-          type: boolean
-          const: false
-        error:
-          type: string
   securitySchemes:
     basicAuth:
       type: http
@@ -612,6 +609,3 @@ components:
       in: query
       name: access_key
       description: ScreenshotOne style.
-x-refined-from:
-- sahifa.json
-- sahifa-openapi.json
