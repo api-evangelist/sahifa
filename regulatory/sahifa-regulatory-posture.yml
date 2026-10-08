@@ -1,0 +1,50 @@
+generated: '2026-10-08'
+method: searched
+source:
+- https://sahifa.dev/en/docs/compliance
+- https://sahifa.dev/en/data-residency
+- https://sahifa.dev/en/dpa
+- https://sahifa.dev/docs/openapi.json
+signals:
+  data_residency:
+    url: https://sahifa.dev/en/data-residency
+    country: SA
+    region: me-jeddah-1
+    frameworks_named:
+    - SAMA Cyber Security Framework
+    - Saudi PDPL
+    evidence:
+    - source: https://sahifa.dev/en/data-residency
+      http_status: 200
+      fetched: '2026-10-08'
+      quote: 'Everything you send to the API, and everything it returns, is processed in Saudi Arabia and never leaves it.
+        The same is true of the account database and its backups.'
+    - source: https://sahifa.dev/docs/openapi.json
+      http_status: 200
+      fetched: '2026-10-08'
+      quote: 'info.x-data-residency: country SA, region me-jeddah-1, storage none, frameworks [SAMA Cyber Security Framework,
+        Saudi PDPL], dpa https://sahifa.dev/en/dpa'
+    note: Rendering runs in memory on Oracle Cloud, Jeddah (me-jeddah-1), with no CDN, proxy or load balancer outside the
+      Kingdom. The data residency page lists the parts that run elsewhere (sign-in email and DNS at Rackhost, Hungary; TLS
+      certificates from Let's Encrypt; the optional website chat via Anthropic, United States; administration by Yimello LLC,
+      United Arab Emirates).
+  compliance:
+    url: https://sahifa.dev/en/docs/compliance
+    evidence:
+    - source: https://sahifa.dev/en/docs/compliance
+      http_status: 200
+      fetched: '2026-10-08'
+      quote: 'Every API request is processed on servers in Saudi Arabia: Oracle Cloud Infrastructure, Jeddah region ( me-jeddah-1 ).
+        The HTML, URLs and parameters you send, and the PDFs and images produced, are handled in memory and discarded when the
+        response has been sent.'
+    note: Maps the service to the SAMA Cyber Security Framework and outsourcing rules and to the PDPL transfer regulations
+      (SDAIA); the page states it describes the service and is not legal advice.
+  data_processing_agreement:
+    url: https://sahifa.dev/en/dpa
+    evidence:
+    - source: https://sahifa.dev/en/dpa
+      http_status: 200
+      fetched: '2026-10-08'
+      quote: 'This is the template we sign with customers on the Compliance plan, and on request on any paid plan. It is published
+        so your legal team can read it before you buy.'
+    note: Processor is Yimello LLC (Sharjah, United Arab Emirates), operator of Sahifa.

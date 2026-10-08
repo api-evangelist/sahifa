@@ -3,10 +3,10 @@
  "requested_url": "https://sahifa.dev/docs/openapi.json",
  "status": 200,
  "content_type": "application/json",
- "bytes": 36973,
- "sha256": "e3429310551d1d7c65ef79ac425b7f3f493c6714ea81112cbcaad7d31707ee23",
- "fetched_at": "2026-10-04",
- "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "bytes": 51417,
+ "sha256": "54d8a4efdaeef68179e912e4d59072dd1248c28467a9171b70a75b58753f84f1",
+ "fetched_at": "2026-10-08",
+ "fetched_by": "hand (correction request 2026-10-07)",
  "match": "byte-identical",
- "note": "Re-fetched from the provider by verify-openapi-sources.py; the archived file is byte-identical to what the provider serves."
+ "note": "Re-fetched 2026-10-08 on the provider's request; the provider moved the contract to info.version 1.0.0. The 2026-09-24 copy remains as _original/sahifa.json."
 }

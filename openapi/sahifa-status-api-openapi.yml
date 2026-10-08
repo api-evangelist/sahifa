@@ -1,0 +1,88 @@
+openapi: 3.2.0
+info:
+  title: Sahifa Status API
+  version: 1.0.0
+  summary: HTML to PDF and screenshot API hosted in Saudi Arabia
+  description: HTML to PDF and screenshot API hosted in Jeddah, Saudi Arabia.
+  termsOfService: https://sahifa.dev/en/terms
+  contact:
+    name: Sahifa support
+    email: support@sahifa.dev
+    url: https://sahifa.dev/en/contact
+  license:
+    name: Proprietary
+    url: https://sahifa.dev/en/terms
+  x-provider: Yimello LLC (United Arab Emirates)
+  x-data-residency:
+    country: SA
+    region: me-jeddah-1
+    storage: none
+    frameworks:
+    - SAMA Cyber Security Framework
+    - Saudi PDPL
+    dpa: https://sahifa.dev/en/dpa
+    details: https://sahifa.dev/en/data-residency
+  x-pricing: https://sahifa.dev/en/pricing
+  x-changelog: https://sahifa.dev/en/docs/changelog
+  x-status: https://stats.uptimerobot.com/5fFpK4UvT9
+servers:
+- url: https://api.sahifa.dev
+  description: Production, Jeddah, Saudi Arabia (me-jeddah-1)
+security:
+- apiKeyHeader: []
+tags:
+- name: Status
+  description: Service health
+paths:
+  /health:
+    get:
+      operationId: health
+      tags:
+      - Status
+      summary: Service status
+      security: []
+      description: '200 when the service can render, 503 otherwise. Public status page: https://stats.uptimerobot.com/5fFpK4UvT9'
+      responses:
+        '200':
+          description: Ready to render
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+              example:
+                status: ok
+        '503':
+          description: Not ready to render
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+              example:
+                status: unavailable
+components:
+  schemas:
+    Health:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+  securitySchemes:
+    apiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: Your API key, from https://sahifa.dev/en/account. Works on every endpoint.
+    basicAuth:
+      type: http
+      scheme: basic
+      description: 'PDFShift compatibility, /v3/convert/pdf only: user ''api'', password = your API key.'
+    accessKey:
+      type: apiKey
+      in: query
+      name: access_key
+      description: ScreenshotOne compatibility, /take only.
+externalDocs:
+  description: Documentation
+  url: https://sahifa.dev/en/docs

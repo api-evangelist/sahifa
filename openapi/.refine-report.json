@@ -4,25 +4,21 @@
     "_original/sahifa-openapi.json"
   ],
   "outputs": [
-    "sahifa-convert-api-openapi.yml",
-    "sahifa-health-api-openapi.yml",
-    "sahifa-take-api-openapi.yml"
+    "sahifa-pdf-api-openapi.yml",
+    "sahifa-screenshots-api-openapi.yml",
+    "sahifa-status-api-openapi.yml"
   ],
-  "archived": [],
+  "archived": [
+    "deleted 3 superseded output(s) from the previous generation"
+  ],
   "errors": [],
   "warnings": [],
   "notes": [
     "1 archived document(s) dropped as subsets of other archived documents",
     "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "sahifa-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "sahifa-openapi.json: tagged paths POST /v3/convert/pdf -> Convert",
-    "sahifa-openapi.json: tagged paths GET /take -> Take",
-    "sahifa-openapi.json: tagged paths POST /take -> Take",
-    "sahifa-openapi.json: tagged paths GET /health -> Health",
-    "sahifa-openapi.json: declared missing tag: Convert",
-    "sahifa-openapi.json: declared missing tag: Health",
-    "sahifa-openapi.json: declared missing tag: Take",
-    "apis.yml register: already-registered"
+    "superseded outputs removed: sahifa-convert-api-openapi.yml, sahifa-health-api-openapi.yml, sahifa-take-api-openapi.yml",
+    "apis.yml register: written (+3 apis, 3 total)"
   ],
   "skipped": [
     "_original/sahifa.json: archived document superseded by a larger archived document",

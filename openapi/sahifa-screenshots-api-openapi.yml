@@ -1,25 +1,52 @@
 openapi: 3.2.0
 info:
-  title: Sahifa Take API
-  version: '2026-09-24'
-  description: 'HTML to PDF and screenshot API hosted in Jeddah, Saudi Arabia. Compatible with PDFShift v3 and ScreenshotOne. Documentation: https://sahifa.dev/docs'
+  title: Sahifa Screenshots API
+  version: 1.0.0
+  summary: HTML to PDF and screenshot API hosted in Saudi Arabia
+  description: HTML to PDF and screenshot API hosted in Jeddah, Saudi Arabia.
+  termsOfService: https://sahifa.dev/en/terms
   contact:
+    name: Sahifa support
     email: support@sahifa.dev
-    url: https://sahifa.dev/docs
+    url: https://sahifa.dev/en/contact
+  license:
+    name: Proprietary
+    url: https://sahifa.dev/en/terms
+  x-provider: Yimello LLC (United Arab Emirates)
+  x-data-residency:
+    country: SA
+    region: me-jeddah-1
+    storage: none
+    frameworks:
+    - SAMA Cyber Security Framework
+    - Saudi PDPL
+    dpa: https://sahifa.dev/en/dpa
+    details: https://sahifa.dev/en/data-residency
+  x-pricing: https://sahifa.dev/en/pricing
+  x-changelog: https://sahifa.dev/en/docs/changelog
+  x-status: https://stats.uptimerobot.com/5fFpK4UvT9
 servers:
 - url: https://api.sahifa.dev
-  description: Jeddah (me-jeddah-1)
+  description: Production, Jeddah, Saudi Arabia (me-jeddah-1)
 security:
-- basicAuth: []
 - apiKeyHeader: []
-- accessKey: []
 tags:
-- name: Take
+- name: Screenshots
+  description: Screenshots of a URL or HTML, ScreenshotOne compatible
+  externalDocs:
+    url: https://sahifa.dev/en/docs/screenshot
 paths:
   /take:
     get:
       operationId: takeScreenshot
+      tags:
+      - Screenshots
       summary: Screenshot of a URL or HTML (ScreenshotOne compatible)
+      description: 'Captures a public URL or an HTML document and returns the image (or PDF). Nothing is stored. Retrying is safe: a render has no side effects and nothing is stored, so a repeated request never creates a duplicate. Retry 408, 429 and 503 with an increasing wait (for example 2, 4 and 8 seconds); do not retry other 4xx errors.'
+      security:
+      - apiKeyHeader: []
+      - accessKey: []
+      x-idempotent: true
       parameters:
       - name: url
         in: query
@@ -29,6 +56,7 @@ paths:
           format: uri
           description: Public http(s) address to capture. Send exactly one of url and html.
         description: Public http(s) address to capture. Send exactly one of url and html.
+        example: https://example.com
       - name: html
         in: query
         required: false
@@ -49,6 +77,7 @@ paths:
           - pdf
           default: png
         description: ''
+        example: png
       - name: image_quality
         in: query
         required: false
@@ -70,6 +99,7 @@ paths:
         schema:
           type: boolean
         description: ''
+        example: true
       - name: viewport_width
         in: query
         required: false
@@ -292,58 +322,87 @@ paths:
                 $ref: '#/components/schemas/Error'
           description: Selector not found
         '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
           description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                success: false
+                error: source is required
         '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
           description: Missing or invalid API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                success: false
+                error: Invalid or missing API key
         '402':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
           description: Monthly render allowance used up
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                success: false
+                error: Monthly render allowance used up
         '408':
+          description: 'Rendering timed out. Retrying is safe: a render has no side effects and nothing is stored, so a repeated request never creates a duplicate. Retry 408, 429 and 503 with an increasing wait (for example 2, 4 and 8 seconds); do not retry other 4xx errors.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-          description: Rendering timed out
+              example:
+                success: false
+                error: Rendering timed out
         '413':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
           description: Request body over 10 MB
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                success: false
+                error: Request body too large
         '429':
+          description: 'Render queue full. Retrying is safe: a render has no side effects and nothing is stored, so a repeated request never creates a duplicate. Retry 408, 429 and 503 with an increasing wait (for example 2, 4 and 8 seconds); do not retry other 4xx errors.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-          description: Render queue full; retry
+              example:
+                success: false
+                error: Render queue full, retry shortly
         '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
           description: Rendering error
-        '503':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-          description: Temporarily unavailable; retry
-      tags:
-      - Take
+              example:
+                success: false
+                error: Rendering failed
+        '503':
+          description: 'Temporarily unavailable. Retrying is safe: a render has no side effects and nothing is stored, so a repeated request never creates a duplicate. Retry 408, 429 and 503 with an increasing wait (for example 2, 4 and 8 seconds); do not retry other 4xx errors.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                success: false
+                error: Service temporarily unavailable
     post:
       operationId: takeScreenshotPost
+      tags:
+      - Screenshots
       summary: Screenshot with a JSON body
+      description: 'Same as GET /take, with the options in a JSON body; use it for long HTML. Retrying is safe: a render has no side effects and nothing is stored, so a repeated request never creates a duplicate. Retry 408, 429 and 503 with an increasing wait (for example 2, 4 and 8 seconds); do not retry other 4xx errors.'
+      security:
+      - apiKeyHeader: []
+      - accessKey: []
+      x-idempotent: true
       requestBody:
         required: true
         content:
@@ -480,6 +539,23 @@ paths:
                     - websocket
                     - other
                     - document
+            examples:
+              url:
+                summary: Full-page PNG of a web page, cookie banners hidden
+                value:
+                  url: https://example.com
+                  format: png
+                  viewport_width: 1280
+                  viewport_height: 720
+                  full_page: true
+                  block_cookie_banners: true
+              html:
+                summary: HTML to JPEG, JSON response
+                value:
+                  html: <h1 dir="rtl">مرحبًا</h1>
+                  format: jpeg
+                  image_quality: 85
+                  response_type: json
       responses:
         '200':
           $ref: '#/components/responses/Screenshot'
@@ -490,65 +566,78 @@ paths:
                 $ref: '#/components/schemas/Error'
           description: Selector not found
         '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
           description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                success: false
+                error: source is required
         '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
           description: Missing or invalid API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                success: false
+                error: Invalid or missing API key
         '402':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
           description: Monthly render allowance used up
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                success: false
+                error: Monthly render allowance used up
         '408':
+          description: 'Rendering timed out. Retrying is safe: a render has no side effects and nothing is stored, so a repeated request never creates a duplicate. Retry 408, 429 and 503 with an increasing wait (for example 2, 4 and 8 seconds); do not retry other 4xx errors.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-          description: Rendering timed out
+              example:
+                success: false
+                error: Rendering timed out
         '413':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
           description: Request body over 10 MB
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                success: false
+                error: Request body too large
         '429':
+          description: 'Render queue full. Retrying is safe: a render has no side effects and nothing is stored, so a repeated request never creates a duplicate. Retry 408, 429 and 503 with an increasing wait (for example 2, 4 and 8 seconds); do not retry other 4xx errors.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-          description: Render queue full; retry
+              example:
+                success: false
+                error: Render queue full, retry shortly
         '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
           description: Rendering error
-        '503':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-          description: Temporarily unavailable; retry
-      tags:
-      - Take
+              example:
+                success: false
+                error: Rendering failed
+        '503':
+          description: 'Temporarily unavailable. Retrying is safe: a render has no side effects and nothing is stored, so a repeated request never creates a duplicate. Retry 408, 429 and 503 with an increasing wait (for example 2, 4 and 8 seconds); do not retry other 4xx errors.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                success: false
+                error: Service temporarily unavailable
 components:
-  schemas:
-    Error:
-      type: object
-      properties:
-        success:
-          type: boolean
-          const: false
-        error:
-          type: string
   responses:
     Screenshot:
       description: The image or PDF, or JSON when response_type=json
@@ -565,6 +654,14 @@ components:
           schema:
             type: integer
           description: Renders left this month before this request
+        X-Quota-Daily-Limit:
+          schema:
+            type: integer
+          description: 'Sandbox keys only: daily render allowance'
+        X-Quota-Daily-Remaining:
+          schema:
+            type: integer
+          description: 'Sandbox keys only: renders left today'
       content:
         image/png:
           schema:
@@ -595,17 +692,39 @@ components:
                 contentEncoding: base64
               size:
                 type: integer
+          example:
+            success: true
+            content_type: image/png
+            data: iVBORw0KGgoAAAANSUhEUgAA...
+            size: 48211
+  schemas:
+    Error:
+      type: object
+      required:
+      - success
+      - error
+      properties:
+        success:
+          type: boolean
+          const: false
+        error:
+          type: string
+          description: Human-readable reason
   securitySchemes:
-    basicAuth:
-      type: http
-      scheme: basic
-      description: User 'api', password = your API key (PDFShift style).
     apiKeyHeader:
       type: apiKey
       in: header
       name: X-API-Key
+      description: Your API key, from https://sahifa.dev/en/account. Works on every endpoint.
+    basicAuth:
+      type: http
+      scheme: basic
+      description: 'PDFShift compatibility, /v3/convert/pdf only: user ''api'', password = your API key.'
     accessKey:
       type: apiKey
       in: query
       name: access_key
-      description: ScreenshotOne style.
+      description: ScreenshotOne compatibility, /take only.
+externalDocs:
+  description: Documentation
+  url: https://sahifa.dev/en/docs

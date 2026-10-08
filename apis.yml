@@ -19,7 +19,7 @@ specificationVersion: '0.20'
 
 created: '2026-09-28'
 
-modified: '2026-09-28'
+modified: '2026-10-08'
 
 tags:
 - Company
@@ -84,44 +84,70 @@ common:
   url: https://sahifa.dev/en/docs/quickstart
 - type: Support
   url: https://sahifa.dev/en/contact
+- type: LLMsTxt
+  url: llms/sahifa-llms.txt
+- type: Pricing
+  url: https://sahifa.dev/en/pricing
+- type: StatusPage
+  url: https://stats.uptimerobot.com/5fFpK4UvT9
+- type: Compliance
+  url: https://sahifa.dev/en/docs/compliance
+- type: DataResidency
+  url: https://sahifa.dev/en/data-residency
 
 apis:
-- aid: sahifa:sahifa-convert-api
-  name: Sahifa Convert API
-  description: The Convert API from Sahifa — 1 operation(s) for convert.
+- aid: sahifa:sahifa-pdf-api
+  name: Sahifa PDF API
+  description: HTML or a URL to PDF, PDFShift v3 compatible
   humanURL: https://sahifa.dev/en/docs
   baseURL: https://api.sahifa.dev
   tags:
-  - Convert
+  - PDF
   properties:
   - type: OpenAPI
-    url: openapi/sahifa-convert-api-openapi.yml
-- aid: sahifa:sahifa-health-api
-  name: Sahifa Health API
-  description: The Health API from Sahifa — 1 operation(s) for health.
+    url: openapi/sahifa-pdf-api-openapi.yml
+- aid: sahifa:sahifa-screenshots-api
+  name: Sahifa Screenshots API
+  description: Screenshots of a URL or HTML, ScreenshotOne compatible
   humanURL: https://sahifa.dev/en/docs
   baseURL: https://api.sahifa.dev
   tags:
-  - Health
+  - Screenshots
   properties:
   - type: OpenAPI
-    url: openapi/sahifa-health-api-openapi.yml
-- aid: sahifa:sahifa-take-api
-  name: Sahifa Take API
-  description: The Take API from Sahifa — 1 operation(s) for take.
+    url: openapi/sahifa-screenshots-api-openapi.yml
+- aid: sahifa:sahifa-status-api
+  name: Sahifa Status API
+  description: Service health
   humanURL: https://sahifa.dev/en/docs
   baseURL: https://api.sahifa.dev
   tags:
-  - Take
+  - Status
   properties:
   - type: OpenAPI
-    url: openapi/sahifa-take-api-openapi.yml
+    url: openapi/sahifa-status-api-openapi.yml
 x-submission-notes: HTML-to-PDF and screenshot API with Arabic/RTL support, hosted in Saudi Arabia; OpenAPI at /docs/openapi.json; free tier 100
   renders/month.
 
 x-submission-probe: '2026-09-28: root 200, invented 404, openapi 200, docs 200'
 
 x-submitted-by: support@sahifa.dev (apis.io/add, 2026-09-27)
+x-correction-request:
+  requested: '2026-10-07'
+  source:
+  - _messages/2026-10/2026-10-07-apisio-3325-sahifa-on-apisio-profile-updated-please-re-profile.md
+  request: 'György Gulyás (gyorgy@sahifa.dev), 2026-10-07: the OpenAPI at https://sahifa.dev/docs/openapi.json is now 1.0.0 with
+    examples, X-Quota-* headers, retry/idempotency guidance, tags, terms and licence, and X-API-Key as the primary scheme; data
+    residency (SAMA, PDPL) is stated in info.description, an x-data-residency block and https://sahifa.dev/en/docs/compliance; new
+    llms.txt, pricing page, changelog and public status page -- please re-profile.'
+  applied: '2026-10-08'
+  applied_note: 'Verified live 2026-10-08 (invented paths 404): openapi.json 200, OpenAPI 3.1.0, info.version 1.0.0, 4 operations
+    each with examples, tags PDF/Screenshots/Status, X-Quota-Limit/Remaining/Daily documented, license + termsOfService, top-level
+    security X-API-Key with Basic only on /v3/convert/pdf and access_key only on /take, info.x-data-residency (SA, me-jeddah-1,
+    SAMA CSF, Saudi PDPL). Replaced openapi/_original/sahifa-openapi.json verbatim (51,417 bytes) and re-split: the Convert/Health/Take
+    files and API entries became PDF/Screenshots/Status. Added llms/sahifa-llms.txt verbatim, regulatory/sahifa-regulatory-posture.yml
+    (quotes from the compliance, data-residency and DPA pages), and LLMsTxt, Pricing, StatusPage, Compliance and DataResidency
+    pointers. Changelog pointer already present.'
 x-enrichment:
   date: '2026-09-28'
   status: enriched

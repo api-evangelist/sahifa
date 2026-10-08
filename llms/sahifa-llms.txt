@@ -1,0 +1,52 @@
+# Sahifa
+
+> HTML to PDF and screenshot API hosted in Jeddah, Saudi Arabia. Request content and rendered documents are processed only in the Kingdom and never stored, which supports SAMA and PDPL data residency. Drop-in compatible with PDFShift v3 (POST /v3/convert/pdf) and ScreenshotOne (/take). Operated by Yimello LLC (UAE).
+
+Base URL: https://api.sahifa.dev. Authentication: X-API-Key header (Basic auth "api:KEY" on /v3/convert/pdf and access_key on /take also work). Renders have no side effects, so retries are safe. Free Sandbox key: https://sahifa.dev/en/account
+
+- [OpenAPI 3.1 specification](https://sahifa.dev/docs/openapi.json): machine-readable description of every endpoint, with examples
+- [Service status](https://stats.uptimerobot.com/5fFpK4UvT9): live availability of the API and the website, checked every 5 minutes
+
+## Getting started
+
+- [Overview](https://sahifa.dev/en/docs): Sahifa is an HTML to PDF and screenshot API hosted in Jeddah, compatible with PDFShift and ScreenshotOne.
+- [Quickstart](https://sahifa.dev/en/docs/quickstart): Create your first PDF and screenshot with the Sahifa API in a few minutes.
+- [Authentication](https://sahifa.dev/en/docs/authentication): How to send your API key to the Sahifa API, and how to keep it safe.
+
+## API reference
+
+- [HTML to PDF](https://sahifa.dev/en/docs/pdf): Reference for POST /v3/convert/pdf: every parameter, header and footer variables, responses.
+- [Screenshots](https://sahifa.dev/en/docs/screenshot): Reference for GET and POST /take: every parameter, blocking options, responses.
+- [Errors](https://sahifa.dev/en/docs/errors): Error format, HTTP status codes and how to fix each of them.
+- [Limits and timeouts](https://sahifa.dev/en/docs/limits): Request size, timeouts, concurrency, queueing and monthly allowances.
+- [OpenAPI specification](https://sahifa.dev/en/docs/openapi): Download the OpenAPI 3.1 description of the Sahifa API.
+
+## Guides
+
+- [Code examples](https://sahifa.dev/en/docs/examples): Complete, tested examples in curl, JavaScript, Python, .NET and Java.
+- [Arabic and RTL documents](https://sahifa.dev/en/docs/arabic): Fonts, digits, bidirectional text, ZATCA QR codes and page headers for Arabic documents.
+- [Migrating from PDFShift or ScreenshotOne](https://sahifa.dev/en/docs/migrate): Switch an existing integration to Sahifa by changing the base URL; the differences to know.
+- [Tips and pitfalls](https://sahifa.dev/en/docs/tips): Practical advice for sharp, complete and fast renders, and the mistakes to avoid.
+- [Use cases](https://sahifa.dev/en/docs/use-cases): Invoices, statements, contracts, KYB website records and other common uses.
+
+## Trust and support
+
+- [Security and data handling](https://sahifa.dev/en/docs/security): Where requests are processed, what is logged, what is never stored, and how the renderer is isolated.
+- [Data residency and compliance](https://sahifa.dev/en/docs/compliance): How Sahifa supports SAMA and PDPL data residency: where requests are processed, what is never stored, the DPA and the audit letter.
+- [FAQ](https://sahifa.dev/en/docs/faq): Answers to common questions about Sahifa.
+- [Changelog](https://sahifa.dev/en/docs/changelog): Changes to the Sahifa API.
+
+## Product, pricing and legal
+
+- [Pricing](https://sahifa.dev/en/pricing): Sahifa plans and prices in Saudi riyals: a free Sandbox, Developer, Business and Compliance, with the monthly render allowance of each.
+- [Data residency](https://sahifa.dev/en/data-residency): Where each part of Sahifa runs, and which data, if any, leaves Saudi Arabia.
+- [Data processing agreement](https://sahifa.dev/en/dpa): The data processing agreement Sahifa signs with its customers: what is processed, where, the security measures and the sub-processors.
+- [Sahifa and other HTML to PDF APIs](https://sahifa.dev/en/alternatives): How Sahifa compares with PDFShift, DocRaptor and ScreenshotOne, and how to move existing code.
+- [Sahifa for Salla and Zid stores](https://sahifa.dev/en/store-app): How to install Sahifa on Salla or Zid, print invoices and packing slips for your orders, and choose a plan.
+- [About Sahifa](https://sahifa.dev/en/about): Sahifa is an HTML to PDF and screenshot API hosted in Jeddah, operated by Yimello LLC, a software company registered in the United Arab Emirates.
+- [Contact](https://sahifa.dev/en/contact): How to reach Sahifa support and Yimello LLC.
+
+## Optional
+
+- [Arabic site](https://sahifa.dev/): the same pages in Arabic; Arabic documentation at https://sahifa.dev/docs
+- [Code examples on GitHub](https://github.com/gyorgy-gulyas/sahifa-examples): curl, JavaScript, Python, .NET and Java

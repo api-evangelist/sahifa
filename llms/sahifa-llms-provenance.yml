@@ -1,0 +1,6 @@
+generated: '2026-10-08'
+method: probed
+generator: hand (correction request 2026-10-07)
+source: https://sahifa.dev/llms.txt
+bytes: 4632
+note: saved verbatim; the provider's own document (text/plain, 200; an invented path on sahifa.dev returns a real 404)

@@ -2,35 +2,88 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Sahifa API",
-    "version": "2026-09-24",
-    "description": "HTML to PDF and screenshot API hosted in Jeddah, Saudi Arabia. Compatible with PDFShift v3 and ScreenshotOne. Documentation: https://sahifa.dev/docs",
+    "version": "1.0.0",
+    "summary": "HTML to PDF and screenshot API hosted in Saudi Arabia",
+    "description": "HTML to PDF and screenshot API hosted in Jeddah, Saudi Arabia. Compatible with PDFShift v3 (POST /v3/convert/pdf) and ScreenshotOne (/take).\n\n**Data residency and compliance.** Every request is processed on servers in the Kingdom of Saudi Arabia (Oracle Cloud, me-jeddah-1). Request content and rendered documents are never stored and never leave the Kingdom. This supports the customer-data residency expectations of the SAMA Cyber Security Framework and of Saudi Arabia's Personal Data Protection Law (PDPL). Data processing agreement: https://sahifa.dev/en/dpa. What runs where: https://sahifa.dev/en/data-residency\n\n**Authentication.** Send your API key in the X-API-Key header. For drop-in compatibility, /v3/convert/pdf also accepts PDFShift-style Basic auth, and /take accepts the ScreenshotOne-style access_key parameter.\n\n**Retries and idempotency.** Retrying is safe: a render has no side effects and nothing is stored, so a repeated request never creates a duplicate. Retry 408, 429 and 503 with an increasing wait (for example 2, 4 and 8 seconds); do not retry other 4xx errors.\n\n**Limits.** Each plan has a monthly render allowance (Sandbox keys also a daily one), reported on every response in the X-Quota-* headers; a used-up allowance answers 402. Concurrent renders are queued, and a full queue answers 429. Details: https://sahifa.dev/en/docs/limits\n\nPricing: https://sahifa.dev/en/pricing · Changelog: https://sahifa.dev/en/docs/changelog · Status: https://stats.uptimerobot.com/5fFpK4UvT9",
+    "termsOfService": "https://sahifa.dev/en/terms",
     "contact": {
+      "name": "Sahifa support",
       "email": "support@sahifa.dev",
-      "url": "https://sahifa.dev/docs"
-    }
+      "url": "https://sahifa.dev/en/contact"
+    },
+    "license": {
+      "name": "Proprietary",
+      "url": "https://sahifa.dev/en/terms"
+    },
+    "x-provider": "Yimello LLC (United Arab Emirates)",
+    "x-data-residency": {
+      "country": "SA",
+      "region": "me-jeddah-1",
+      "storage": "none",
+      "frameworks": [
+        "SAMA Cyber Security Framework",
+        "Saudi PDPL"
+      ],
+      "dpa": "https://sahifa.dev/en/dpa",
+      "details": "https://sahifa.dev/en/data-residency"
+    },
+    "x-pricing": "https://sahifa.dev/en/pricing",
+    "x-changelog": "https://sahifa.dev/en/docs/changelog",
+    "x-status": "https://stats.uptimerobot.com/5fFpK4UvT9"
+  },
+  "externalDocs": {
+    "description": "Documentation",
+    "url": "https://sahifa.dev/en/docs"
   },
   "servers": [
     {
       "url": "https://api.sahifa.dev",
-      "description": "Jeddah (me-jeddah-1)"
+      "description": "Production, Jeddah, Saudi Arabia (me-jeddah-1)"
     }
   ],
   "security": [
     {
-      "basicAuth": []
-    },
-    {
       "apiKeyHeader": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "PDF",
+      "description": "HTML or a URL to PDF, PDFShift v3 compatible",
+      "externalDocs": {
+        "url": "https://sahifa.dev/en/docs/pdf"
+      }
     },
     {
-      "accessKey": []
+      "name": "Screenshots",
+      "description": "Screenshots of a URL or HTML, ScreenshotOne compatible",
+      "externalDocs": {
+        "url": "https://sahifa.dev/en/docs/screenshot"
+      }
+    },
+    {
+      "name": "Status",
+      "description": "Service health"
     }
   ],
   "paths": {
     "/v3/convert/pdf": {
       "post": {
         "operationId": "convertPdf",
+        "tags": [
+          "PDF"
+        ],
         "summary": "Convert HTML or a URL to PDF (PDFShift v3 compatible)",
+        "description": "Renders the HTML document or public URL in `source` with Chromium and returns the PDF. Nothing is stored. Retrying is safe: a render has no side effects and nothing is stored, so a repeated request never creates a duplicate. Retry 408, 429 and 503 with an increasing wait (for example 2, 4 and 8 seconds); do not retry other 4xx errors.",
+        "security": [
+          {
+            "apiKeyHeader": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-idempotent": true,
         "requestBody": {
           "required": true,
           "content": {
@@ -220,6 +273,33 @@
                     "description": "Accepted and ignored."
                   }
                 }
+              },
+              "examples": {
+                "arabicInvoice": {
+                  "summary": "Arabic invoice from HTML, with page numbers",
+                  "value": {
+                    "source": "<html dir=\"rtl\" lang=\"ar\"><body><h1>فاتورة ضريبية</h1><p>Invoice INV-1001</p></body></html>",
+                    "format": "A4",
+                    "margin": "15mm",
+                    "footer": {
+                      "source": "<div style=\"font-size:9px;text-align:center\">{{page}} / {{total}}</div>"
+                    }
+                  }
+                },
+                "url": {
+                  "summary": "A public web page to PDF, landscape",
+                  "value": {
+                    "source": "https://example.com",
+                    "landscape": true
+                  }
+                },
+                "base64": {
+                  "summary": "JSON response with base64 data",
+                  "value": {
+                    "source": "<h1>Hello</h1>",
+                    "encode": true
+                  }
+                }
               }
             }
           }
@@ -245,6 +325,18 @@
                   "type": "integer"
                 },
                 "description": "Renders left this month before this request"
+              },
+              "X-Quota-Daily-Limit": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Sandbox keys only: daily render allowance"
+              },
+              "X-Quota-Daily-Remaining": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Sandbox keys only: renders left today"
               }
             },
             "content": {
@@ -272,89 +364,127 @@
                       "type": "integer"
                     }
                   }
+                },
+                "example": {
+                  "success": true,
+                  "data": "JVBERi0xLjcKJcfsj6IK...",
+                  "filesize": 18734,
+                  "duration": 412
                 }
               }
             }
           },
           "400": {
+            "description": "Invalid request",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "success": false,
+                  "error": "source is required"
                 }
               }
-            },
-            "description": "Invalid request"
+            }
           },
           "401": {
+            "description": "Missing or invalid API key",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "success": false,
+                  "error": "Invalid or missing API key"
                 }
               }
-            },
-            "description": "Missing or invalid API key"
+            }
           },
           "402": {
+            "description": "Monthly render allowance used up",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "success": false,
+                  "error": "Monthly render allowance used up"
                 }
               }
-            },
-            "description": "Monthly render allowance used up"
+            }
           },
           "408": {
+            "description": "Rendering timed out. Retrying is safe: a render has no side effects and nothing is stored, so a repeated request never creates a duplicate. Retry 408, 429 and 503 with an increasing wait (for example 2, 4 and 8 seconds); do not retry other 4xx errors.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "success": false,
+                  "error": "Rendering timed out"
                 }
               }
-            },
-            "description": "Rendering timed out"
+            }
           },
           "413": {
+            "description": "Request body over 10 MB",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "success": false,
+                  "error": "Request body too large"
                 }
               }
-            },
-            "description": "Request body over 10 MB"
+            }
           },
           "429": {
+            "description": "Render queue full. Retrying is safe: a render has no side effects and nothing is stored, so a repeated request never creates a duplicate. Retry 408, 429 and 503 with an increasing wait (for example 2, 4 and 8 seconds); do not retry other 4xx errors.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "success": false,
+                  "error": "Render queue full, retry shortly"
                 }
               }
-            },
-            "description": "Render queue full; retry"
+            }
           },
           "500": {
+            "description": "Rendering error",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "success": false,
+                  "error": "Rendering failed"
                 }
               }
-            },
-            "description": "Rendering error"
+            }
           },
           "503": {
+            "description": "Temporarily unavailable. Retrying is safe: a render has no side effects and nothing is stored, so a repeated request never creates a duplicate. Retry 408, 429 and 503 with an increasing wait (for example 2, 4 and 8 seconds); do not retry other 4xx errors.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "success": false,
+                  "error": "Service temporarily unavailable"
                 }
               }
-            },
-            "description": "Temporarily unavailable; retry"
+            }
           }
         }
       }
@@ -362,7 +492,20 @@
     "/take": {
       "get": {
         "operationId": "takeScreenshot",
+        "tags": [
+          "Screenshots"
+        ],
         "summary": "Screenshot of a URL or HTML (ScreenshotOne compatible)",
+        "description": "Captures a public URL or an HTML document and returns the image (or PDF). Nothing is stored. Retrying is safe: a render has no side effects and nothing is stored, so a repeated request never creates a duplicate. Retry 408, 429 and 503 with an increasing wait (for example 2, 4 and 8 seconds); do not retry other 4xx errors.",
+        "security": [
+          {
+            "apiKeyHeader": []
+          },
+          {
+            "accessKey": []
+          }
+        ],
+        "x-idempotent": true,
         "parameters": [
           {
             "name": "url",
@@ -373,7 +516,8 @@
               "format": "uri",
               "description": "Public http(s) address to capture. Send exactly one of url and html."
             },
-            "description": "Public http(s) address to capture. Send exactly one of url and html."
+            "description": "Public http(s) address to capture. Send exactly one of url and html.",
+            "example": "https://example.com"
           },
           {
             "name": "html",
@@ -400,7 +544,8 @@
               ],
               "default": "png"
             },
-            "description": ""
+            "description": "",
+            "example": "png"
           },
           {
             "name": "image_quality",
@@ -430,7 +575,8 @@
             "schema": {
               "type": "boolean"
             },
-            "description": ""
+            "description": "",
+            "example": true
           },
           {
             "name": "viewport_width",
@@ -749,90 +895,135 @@
             "description": "Selector not found"
           },
           "400": {
+            "description": "Invalid request",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "success": false,
+                  "error": "source is required"
                 }
               }
-            },
-            "description": "Invalid request"
+            }
           },
           "401": {
+            "description": "Missing or invalid API key",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "success": false,
+                  "error": "Invalid or missing API key"
                 }
               }
-            },
-            "description": "Missing or invalid API key"
+            }
           },
           "402": {
+            "description": "Monthly render allowance used up",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "success": false,
+                  "error": "Monthly render allowance used up"
                 }
               }
-            },
-            "description": "Monthly render allowance used up"
+            }
           },
           "408": {
+            "description": "Rendering timed out. Retrying is safe: a render has no side effects and nothing is stored, so a repeated request never creates a duplicate. Retry 408, 429 and 503 with an increasing wait (for example 2, 4 and 8 seconds); do not retry other 4xx errors.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "success": false,
+                  "error": "Rendering timed out"
                 }
               }
-            },
-            "description": "Rendering timed out"
+            }
           },
           "413": {
+            "description": "Request body over 10 MB",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "success": false,
+                  "error": "Request body too large"
                 }
               }
-            },
-            "description": "Request body over 10 MB"
+            }
           },
           "429": {
+            "description": "Render queue full. Retrying is safe: a render has no side effects and nothing is stored, so a repeated request never creates a duplicate. Retry 408, 429 and 503 with an increasing wait (for example 2, 4 and 8 seconds); do not retry other 4xx errors.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "success": false,
+                  "error": "Render queue full, retry shortly"
                 }
               }
-            },
-            "description": "Render queue full; retry"
+            }
           },
           "500": {
+            "description": "Rendering error",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "success": false,
+                  "error": "Rendering failed"
                 }
               }
-            },
-            "description": "Rendering error"
+            }
           },
           "503": {
+            "description": "Temporarily unavailable. Retrying is safe: a render has no side effects and nothing is stored, so a repeated request never creates a duplicate. Retry 408, 429 and 503 with an increasing wait (for example 2, 4 and 8 seconds); do not retry other 4xx errors.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "success": false,
+                  "error": "Service temporarily unavailable"
                 }
               }
-            },
-            "description": "Temporarily unavailable; retry"
+            }
           }
         }
       },
       "post": {
         "operationId": "takeScreenshotPost",
+        "tags": [
+          "Screenshots"
+        ],
         "summary": "Screenshot with a JSON body",
+        "description": "Same as GET /take, with the options in a JSON body; use it for long HTML. Retrying is safe: a render has no side effects and nothing is stored, so a repeated request never creates a duplicate. Retry 408, 429 and 503 with an increasing wait (for example 2, 4 and 8 seconds); do not retry other 4xx errors.",
+        "security": [
+          {
+            "apiKeyHeader": []
+          },
+          {
+            "accessKey": []
+          }
+        ],
+        "x-idempotent": true,
         "requestBody": {
           "required": true,
           "content": {
@@ -1012,6 +1203,28 @@
                     }
                   }
                 }
+              },
+              "examples": {
+                "url": {
+                  "summary": "Full-page PNG of a web page, cookie banners hidden",
+                  "value": {
+                    "url": "https://example.com",
+                    "format": "png",
+                    "viewport_width": 1280,
+                    "viewport_height": 720,
+                    "full_page": true,
+                    "block_cookie_banners": true
+                  }
+                },
+                "html": {
+                  "summary": "HTML to JPEG, JSON response",
+                  "value": {
+                    "html": "<h1 dir=\"rtl\">مرحبًا</h1>",
+                    "format": "jpeg",
+                    "image_quality": 85,
+                    "response_type": "json"
+                  }
+                }
               }
             }
           }
@@ -1031,84 +1244,116 @@
             "description": "Selector not found"
           },
           "400": {
+            "description": "Invalid request",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "success": false,
+                  "error": "source is required"
                 }
               }
-            },
-            "description": "Invalid request"
+            }
           },
           "401": {
+            "description": "Missing or invalid API key",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "success": false,
+                  "error": "Invalid or missing API key"
                 }
               }
-            },
-            "description": "Missing or invalid API key"
+            }
           },
           "402": {
+            "description": "Monthly render allowance used up",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "success": false,
+                  "error": "Monthly render allowance used up"
                 }
               }
-            },
-            "description": "Monthly render allowance used up"
+            }
           },
           "408": {
+            "description": "Rendering timed out. Retrying is safe: a render has no side effects and nothing is stored, so a repeated request never creates a duplicate. Retry 408, 429 and 503 with an increasing wait (for example 2, 4 and 8 seconds); do not retry other 4xx errors.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "success": false,
+                  "error": "Rendering timed out"
                 }
               }
-            },
-            "description": "Rendering timed out"
+            }
           },
           "413": {
+            "description": "Request body over 10 MB",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "success": false,
+                  "error": "Request body too large"
                 }
               }
-            },
-            "description": "Request body over 10 MB"
+            }
           },
           "429": {
+            "description": "Render queue full. Retrying is safe: a render has no side effects and nothing is stored, so a repeated request never creates a duplicate. Retry 408, 429 and 503 with an increasing wait (for example 2, 4 and 8 seconds); do not retry other 4xx errors.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "success": false,
+                  "error": "Render queue full, retry shortly"
                 }
               }
-            },
-            "description": "Render queue full; retry"
+            }
           },
           "500": {
+            "description": "Rendering error",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "success": false,
+                  "error": "Rendering failed"
                 }
               }
-            },
-            "description": "Rendering error"
+            }
           },
           "503": {
+            "description": "Temporarily unavailable. Retrying is safe: a render has no side effects and nothing is stored, so a repeated request never creates a duplicate. Retry 408, 429 and 503 with an increasing wait (for example 2, 4 and 8 seconds); do not retry other 4xx errors.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "success": false,
+                  "error": "Service temporarily unavailable"
                 }
               }
-            },
-            "description": "Temporarily unavailable; retry"
+            }
           }
         }
       }
@@ -1116,15 +1361,35 @@
     "/health": {
       "get": {
         "operationId": "health",
+        "tags": [
+          "Status"
+        ],
         "summary": "Service status",
         "security": [],
+        "description": "200 when the service can render, 503 otherwise. Public status page: https://stats.uptimerobot.com/5fFpK4UvT9",
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Ready to render",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/Health"
+                },
+                "example": {
+                  "status": "ok"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Not ready to render",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                },
+                "example": {
+                  "status": "unavailable"
                 }
               }
             }
@@ -1135,32 +1400,49 @@
   },
   "components": {
     "securitySchemes": {
-      "basicAuth": {
-        "type": "http",
-        "scheme": "basic",
-        "description": "User 'api', password = your API key (PDFShift style)."
-      },
       "apiKeyHeader": {
         "type": "apiKey",
         "in": "header",
-        "name": "X-API-Key"
+        "name": "X-API-Key",
+        "description": "Your API key, from https://sahifa.dev/en/account. Works on every endpoint."
+      },
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic",
+        "description": "PDFShift compatibility, /v3/convert/pdf only: user 'api', password = your API key."
       },
       "accessKey": {
         "type": "apiKey",
         "in": "query",
         "name": "access_key",
-        "description": "ScreenshotOne style."
+        "description": "ScreenshotOne compatibility, /take only."
       }
     },
     "schemas": {
       "Error": {
         "type": "object",
+        "required": [
+          "success",
+          "error"
+        ],
         "properties": {
           "success": {
             "type": "boolean",
             "const": false
           },
           "error": {
+            "type": "string",
+            "description": "Human-readable reason"
+          }
+        }
+      },
+      "Health": {
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
             "type": "string"
           }
         }
@@ -1187,6 +1469,18 @@
               "type": "integer"
             },
             "description": "Renders left this month before this request"
+          },
+          "X-Quota-Daily-Limit": {
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Sandbox keys only: daily render allowance"
+          },
+          "X-Quota-Daily-Remaining": {
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Sandbox keys only: renders left today"
           }
         },
         "content": {
@@ -1232,6 +1526,12 @@
                   "type": "integer"
                 }
               }
+            },
+            "example": {
+              "success": true,
+              "content_type": "image/png",
+              "data": "iVBORw0KGgoAAAANSUhEUgAA...",
+              "size": 48211
             }
           }
         }
